@@ -111,7 +111,7 @@ export default function DiaryViewer() {
         {currentPost ? (
           <>
             <div className="text-gray-700 border border-gray-300 rounded-xl p-4">
-              <p className="text-sm text-gray-400 mt-2">
+              <p className="text-sm text-black font-bold mt-2">
                 {new Date(currentPost.createdAt).toLocaleString("vi-VN")}
               </p>
               {currentPost.imageUrl && (
@@ -121,11 +121,11 @@ export default function DiaryViewer() {
                   className="w-full rounded-xl h-[150px] object-cover"
                 />
               )}
-              <div className="mb-4 h-[250px] mt-[10px] overflow-y-auto">
+              <div className="mb-4 h-[210px] mt-[10px] overflow-y-auto">
                 {fomatMessage(currentPost.message)}
               </div>
               {currentPost.emoji && (
-                <p className="text-2xl">
+                <p className="text-xl">
                   <span className="text-[15px] font-bold text-[var(--color-main)]">
                     Hôm nay tôi thấy
                   </span>{" "}
@@ -134,7 +134,7 @@ export default function DiaryViewer() {
               )}
             </div>
 
-            <div className="flex justify-between mt-6">
+            <div className="flex justify-between ">
               <button
                 onClick={prev}
                 disabled={currentIndex === 0}
