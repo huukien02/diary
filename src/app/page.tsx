@@ -1,103 +1,170 @@
-import Image from "next/image";
+"use client";
+import { useState, useEffect } from "react";
+import { ref, get } from "firebase/database";
+import { database } from "@/firebaseConfig";
+import fomatMessage from "@/helper/fomatMessage";
+import SearchPopup from "@/components/SearchPopup";
+import { toast } from "react-toastify";
 
-export default function Home() {
+interface Post {
+  message: string;
+  imageUrl: string;
+  createdAt: number;
+  emoji?: string;
+}
+
+export default function DiaryViewer() {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
+  const [isFiltering, setIsFiltering] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [showPopup, setShowPopup] = useState(false);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const snapshot = await get(ref(database, "posts"));
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const postArray = Object.values(data) as Post[];
+        postArray.sort((a, b) => b.createdAt - a.createdAt);
+        setPosts(postArray);
+      }
+    };
+    fetchPosts();
+  }, []);
+
+  const handleSearch = (date: string, emoji: string) => {
+    const filtered = posts.filter((post) => {
+      const dateMatch = date
+        ? new Date(post.createdAt).toISOString().slice(0, 10) === date
+        : true;
+      const emojiMatch = emoji ? post.emoji === emoji : true;
+      return dateMatch && emojiMatch;
+    });
+
+    if (filtered.length > 0) {
+      setFilteredPosts(filtered);
+      setCurrentIndex(0);
+      setIsFiltering(true);
+      setShowPopup(false);
+    } else {
+      toast.warning("Không tìm thấy bài viết phù hợp !!", {
+        position: "top-right",
+        autoClose: 3000, // Tự đóng sau 3s
+        hideProgressBar: false, // Hiện progress bar
+        closeOnClick: true, // Bấm đóng
+        pauseOnHover: true, // Dừng khi hover
+        draggable: true, // Kéo thả
+        progress: undefined,
+        theme: "colored", // Hoặc "light", "dark"
+      });
+      // alert("Không tìm thấy bài viết phù hợp.");
+    }
+  };
+
+  const handleClearFilter = () => {
+    setIsFiltering(false);
+    setFilteredPosts([]);
+    setCurrentIndex(0);
+  };
+
+  const next = () => {
+    if (currentIndex < currentList.length - 1) {
+      setCurrentIndex((prev) => prev + 1);
+    }
+  };
+
+  const prev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex((prev) => prev - 1);
+    }
+  };
+
+  const currentList = isFiltering ? filteredPosts : posts;
+  const currentPost = currentList[currentIndex];
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="h-screen flex items-center justify-center px-[20px]">
+      <div className="flex flex-col gap-4 max-w-md mx-auto rounded-2xl bg-white px-[20px] py-[20px] w-full shadow-xl">
+        <div className="w-full flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-[var(--color-main)]">
+            Diary of 🍉
+          </h1>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowPopup(true)}
+              className="text-sm text-[var(--color-main)]"
+            >
+              🔍
+            </button>
+            {isFiltering && (
+              <button
+                onClick={handleClearFilter}
+                className="text-sm text-red-500 "
+              >
+                Clear
+              </button>
+            )}
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {currentPost ? (
+          <>
+            <div className="text-gray-700 border border-gray-300 rounded-xl p-4">
+              <p className="text-sm text-gray-400 mt-2">
+                {new Date(currentPost.createdAt).toLocaleString("vi-VN")}
+              </p>
+              {currentPost.imageUrl && (
+                <img
+                  src={currentPost.imageUrl}
+                  alt="Post"
+                  className="w-full rounded-xl h-[150px] object-cover"
+                />
+              )}
+              <div className="mb-4 h-[250px] mt-[10px] overflow-y-auto">
+                {fomatMessage(currentPost.message)}
+              </div>
+              {currentPost.emoji && (
+                <p className="text-2xl">
+                  <span className="text-[15px] font-bold text-[var(--color-main)]">
+                    Hôm nay tôi thấy
+                  </span>{" "}
+                  {currentPost.emoji}
+                </p>
+              )}
+            </div>
+
+            <div className="flex justify-between mt-6">
+              <button
+                onClick={prev}
+                disabled={currentIndex === 0}
+                className="px-4 py-2 bg-[var(--color-main)] text-[white] rounded disabled:opacity-50"
+              >
+                Prev
+              </button>
+              <span className="text-sm text-gray-600">
+                {currentIndex + 1}/{currentList.length}
+              </span>
+              <button
+                onClick={next}
+                disabled={currentIndex === currentList.length - 1}
+                className="px-4 py-2 bg-[var(--color-main)] text-[white] rounded disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          </>
+        ) : (
+          <p className="text-center text-gray-500">Không có nhật ký nào.</p>
+        )}
+      </div>
+
+      {showPopup && (
+        <SearchPopup
+          onClose={() => setShowPopup(false)}
+          onSearch={handleSearch}
+        />
+      )}
     </div>
   );
 }
