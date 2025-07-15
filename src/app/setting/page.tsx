@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 
 export default function Settings() {
   const [color, setColor] = useState("#3498db"); // Màu mặc định

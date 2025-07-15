@@ -2,14 +2,9 @@
 import SelectEmoji from "@/components/SelectEmoji";
 import { database } from "@/firebaseConfig";
 import {
-  endAt,
   get,
-  orderByChild,
   push,
-  query,
   ref,
-  set,
-  startAt,
 } from "firebase/database";
 import React, { useState } from "react";
 import { FaUpload } from "react-icons/fa";
