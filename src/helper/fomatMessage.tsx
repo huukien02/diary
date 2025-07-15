@@ -1,6 +1,6 @@
 import React from "react";
 
-function fomatMessage(message: string): JSX.Element[] {
+export default function fomatMessage(message: string): React.JSX.Element[] {
   if (!message) return [];
 
   return message.split(/(?<=[.!?])\s+/).map((sentence, index) => (
@@ -11,5 +11,3 @@ function fomatMessage(message: string): JSX.Element[] {
     </span>
   ));
 }
-
-export default fomatMessage;
