@@ -1,6 +1,6 @@
 import React from "react";
 
-function fomatMessage(message: string): JSX.Element[] {
+function fomatMessage(message: string): any {
   if (!message) return [];
 
   return message.split(/(?<=[.!?])\s+/).map((sentence, index) => (
