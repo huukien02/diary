@@ -1,0 +1,51 @@
+{
+  "pages": {
+    "/_not-found/page": [
+      "static/chunks/webpack-976272dae9bf8025.js",
+      "static/chunks/4bd1b696-1897831b3bbea01c.js",
+      "static/chunks/684-9834ea9cdf5dc782.js",
+      "static/chunks/main-app-7b5fa102606d7097.js",
+      "static/chunks/app/_not-found/page-f6b956134670c08e.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack-976272dae9bf8025.js",
+      "static/chunks/4bd1b696-1897831b3bbea01c.js",
+      "static/chunks/684-9834ea9cdf5dc782.js",
+      "static/chunks/main-app-7b5fa102606d7097.js",
+      "static/css/84c07470f23b48ba.css",
+      "static/chunks/8e1d74a4-fed9db23a34c80bd.js",
+      "static/chunks/799-e85bca17510870bc.js",
+      "static/chunks/app/layout-c3463994ece6ba91.js"
+    ],
+    "/page": [
+      "static/chunks/webpack-976272dae9bf8025.js",
+      "static/chunks/4bd1b696-1897831b3bbea01c.js",
+      "static/chunks/684-9834ea9cdf5dc782.js",
+      "static/chunks/main-app-7b5fa102606d7097.js",
+      "static/chunks/457b8330-f71285b6c7e2ba48.js",
+      "static/chunks/799-e85bca17510870bc.js",
+      "static/chunks/129-4b8e647e360f9fd6.js",
+      "static/chunks/app/page-026ef71b4c72bcd3.js"
+    ],
+    "/setting/page": [
+      "static/chunks/webpack-976272dae9bf8025.js",
+      "static/chunks/4bd1b696-1897831b3bbea01c.js",
+      "static/chunks/684-9834ea9cdf5dc782.js",
+      "static/chunks/main-app-7b5fa102606d7097.js",
+      "static/chunks/799-e85bca17510870bc.js",
+      "static/chunks/app/setting/page-4355d90a0e54c493.js"
+    ],
+    "/write/page": [
+      "static/chunks/webpack-976272dae9bf8025.js",
+      "static/chunks/4bd1b696-1897831b3bbea01c.js",
+      "static/chunks/684-9834ea9cdf5dc782.js",
+      "static/chunks/main-app-7b5fa102606d7097.js",
+      "static/chunks/8e1d74a4-fed9db23a34c80bd.js",
+      "static/chunks/457b8330-f71285b6c7e2ba48.js",
+      "static/chunks/9c4e2130-ff9fe1a73dd465c0.js",
+      "static/chunks/799-e85bca17510870bc.js",
+      "static/chunks/129-4b8e647e360f9fd6.js",
+      "static/chunks/app/write/page-0aeb654c60e150df.js"
+    ]
+  }
+}
